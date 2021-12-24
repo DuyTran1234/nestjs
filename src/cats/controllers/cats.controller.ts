@@ -1,4 +1,4 @@
-import { Body, Controller, Header, HttpCode, HttpStatus, Param, Post, Redirect, Req, Res } from "@nestjs/common";
+import { Body, Controller, Header, HttpCode, HttpException, HttpStatus, Param, Post, Redirect, Req, Res } from "@nestjs/common";
 import { Get } from "@nestjs/common";
 import { Request } from "express";
 import { CreateCatDto } from "../dto/create-cat.dto";
@@ -13,7 +13,7 @@ export class CatsController {
     constructor(
         private catsService: CatsService,
         private httpSerivce: HttpService
-        ) {}
+    ) { }
 
     @Get("getAllCats")
     async findAll(@Req() request: Request): Promise<Cat[]> {
@@ -22,17 +22,22 @@ export class CatsController {
 
     @Post("createCat")
     @HttpCode(201)
-    @Header("X-Powered-By", "none")
     @Header("test", "none")
     createCat(@Body() createCatDto: CreateCatDto): string {
-        this.catsService.create(createCatDto);
-        return "create a new Cat successfully!";
+        // try {
+        //     this.catsService.create(createCatDto);
+        //     return "create a new Cat successfully!";
+        // } catch (error) {
+        //     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        // }
+        throw new HttpException('test Forbidden', HttpStatus.FORBIDDEN);
     }
 
+    // use param in route
     @Get("cat/:id")
-    findOne(@Param('id') idCat: string): string {
-        console.log(idCat);
-        return `Cat id: ${idCat}`;
+    findOne(@Param() params): string {
+        console.log(params.id);
+        return `Cat id: ${params.id}`;
     }
 
     // use lib-specific approach (recommend)
@@ -41,7 +46,7 @@ export class CatsController {
         res.status(HttpStatus.OK);
         return [];
     }
-    
+
     // use HttpService
     @Get('getTestHttp')
     async testHttp(): Promise<string> {
@@ -49,7 +54,7 @@ export class CatsController {
     }
 
     @Post('createHttp')
-    async createHttpController(@Body() createHttpDto: CreateHttpDto) : Promise<string> {
+    async createHttpController(@Body() createHttpDto: CreateHttpDto): Promise<string> {
         return this.httpSerivce.createHttp(createHttpDto);
     }
 }
