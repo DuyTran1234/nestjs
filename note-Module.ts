@@ -28,5 +28,6 @@
 */
 /* 
     Dynamic Modules
-    
+    Đây là tính năng cho phép bạn dễ dàng tạo ra các modules tùy chính có thể được
+    register và configure các provides dynamic. Dynamic modules 
 */
