@@ -10,3 +10,14 @@
     SCOPE
     
 */
+
+/* 
+    OPTIONAL PROVIDES
+    Thỉnh thoảng bạn có thể có những dependencies không cần thiết phải resolved. 
+    Ví dụ, class của bạn có thể phụ thuộc vào một configuration object, nhưng nếu none
+    được truyền vào, các giá trị mặc định nên được sử dụng. Trong trường hợp như vậy,
+    dependency trở thành optional, bởi vì thiếu config provider vẫn không thể xảy ra
+    lỗi.
+    Để chỉ ra một provider là optional, sử dụng @Optional decorator trong signature
+    của constructor.
+*/

@@ -1,14 +1,19 @@
 import { Body, Controller, Header, HttpCode, HttpStatus, Param, Post, Redirect, Req, Res } from "@nestjs/common";
 import { Get } from "@nestjs/common";
 import { Request } from "express";
-import { CreateCatDto } from "../DTO/create-cat.dto";
+import { CreateCatDto } from "../dto/create-cat.dto";
 import { Response } from "express";
-import { Cat } from "src/interfaces/cat.interface";
-import { CatsService } from "src/Services/cats.service";
+import { Cat } from "src/cats/interfaces/cat.interface";
+import { CatsService } from "../services/cats.service";
+import { HttpService } from "src/http/services/http.service";
+import { CreateHttpDto } from "src/http/dto/createHttpDto";
 
 @Controller('cats')
 export class CatsController {
-    constructor(private catsService: CatsService) {}
+    constructor(
+        private catsService: CatsService,
+        private httpSerivce: HttpService
+        ) {}
 
     @Get("getAllCats")
     async findAll(@Req() request: Request): Promise<Cat[]> {
@@ -36,7 +41,17 @@ export class CatsController {
         res.status(HttpStatus.OK);
         return [];
     }
+    
+    // use HttpService
+    @Get('getTestHttp')
+    async testHttp(): Promise<string> {
+        return this.httpSerivce.getTestHttp();
+    }
 
+    @Post('createHttp')
+    async createHttpController(@Body() createHttpDto: CreateHttpDto) : Promise<string> {
+        return this.httpSerivce.createHttp(createHttpDto);
+    }
 }
 
 
