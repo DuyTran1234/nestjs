@@ -36,10 +36,9 @@ export class UsersService {
     }
     async findOneByUsername(username: string): Promise<User> {
         try {
-            const user = this.userModel.findOne({
+            return await this.userModel.findOne({
                 "username": username,
-            });
-            return user;
+            })
         }
         catch(error) {
             throw new HttpException('error found user', HttpStatus.BAD_REQUEST);

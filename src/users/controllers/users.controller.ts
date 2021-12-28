@@ -1,5 +1,7 @@
-import { Body, Controller, HttpException, HttpStatus, Post, UsePipes } from "@nestjs/common";
-import { UserValidationPipe } from "src/validation/user.validation";
+import { Body, Controller, HttpException, HttpStatus, Post, Request, UseGuards, UsePipes } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import { AuthService } from "src/auth/auth.service";
+import { UserValidationPipe } from "src/validation/user.validation.pipe";
 import { CreateUserDto } from "../dto/createUserDto";
 import { UsersService } from "../services/users.service";
 
@@ -8,6 +10,7 @@ import { UsersService } from "../services/users.service";
 export class UsersController {
     constructor(
         private usersService: UsersService, 
+        private authService: AuthService,
     ) {}
     @Post('create-user')
     @UsePipes(new UserValidationPipe())
@@ -17,5 +20,11 @@ export class UsersController {
         } catch (error) {
             throw new HttpException('Create User Failed', HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Post("auth/login")
+    async login(@Body() {username, password}) {
+        const rs = this.authService.validateUser(username, password);
+        return rs;
     }
 }

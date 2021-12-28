@@ -10,9 +10,9 @@ console.log(process.env.DATABASE_URL);
 @Module({
   imports: [
     UsersModule,
-    CatsModule, 
     MongooseModule.forRoot(process.env.DATABASE_URL),
-  ]
+  ],
+  controllers: [],
 })
 export class AppModule {
   // configure middleware function
