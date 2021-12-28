@@ -1,4 +1,4 @@
-import { Body, Controller, Header, HttpCode, HttpException, HttpStatus, Param, Post, Redirect, Req, Res } from "@nestjs/common";
+import { Body, Controller, Header, HttpCode, HttpException, HttpStatus, Param, ParseIntPipe, Post, Redirect, Req, Res, UsePipes } from "@nestjs/common";
 import { Get } from "@nestjs/common";
 import { Request } from "express";
 import { CreateCatDto } from "../dto/create-cat.dto";
@@ -7,6 +7,7 @@ import { Cat } from "src/cats/interfaces/cat.interface";
 import { CatsService } from "../services/cats.service";
 import { HttpService } from "src/http/services/http.service";
 import { CreateHttpDto } from "src/http/dto/createHttpDto";
+import { CatValidationPipe } from "src/validation/cat.validation.pipe";
 
 @Controller('cats')
 export class CatsController {
@@ -21,23 +22,20 @@ export class CatsController {
     }
 
     @Post("createCat")
-    @HttpCode(201)
-    @Header("test", "none")
-    createCat(@Body() createCatDto: CreateCatDto): string {
-        // try {
-        //     this.catsService.create(createCatDto);
-        //     return "create a new Cat successfully!";
-        // } catch (error) {
-        //     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-        // }
-        throw new HttpException('test Forbidden', HttpStatus.FORBIDDEN);
+    async createCat(@Body() createCatDto: CreateCatDto): Promise<string> {
+        try {
+            this.catsService.create(createCatDto);
+            return "create a new Cat successfully!";
+        } catch (error) {
+            throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        }
     }
 
     // use param in route
     @Get("cat/:id")
-    findOne(@Param() params): string {
-        console.log(params.id);
-        return `Cat id: ${params.id}`;
+    findOne(@Param("id", new ParseIntPipe()) id: number): string {
+        console.log(id);
+        return `Cat id: ${id}`;
     }
 
     // use lib-specific approach (recommend)

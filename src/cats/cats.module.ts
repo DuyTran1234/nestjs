@@ -4,9 +4,17 @@ import { CatsController } from "./controllers/cats.controller";
 import { CoreModule } from "src/core/core.module";
 import { CatsService } from "./services/cats.service";
 import { LoggerMiddleware } from "src/middleware/logger.middleware";
+import { MongooseModule } from "@nestjs/mongoose";
+import { Cat } from "./interfaces/cat.interface";
+import { CatSchema } from "./schemas/cat.schema";
 
 @Module({
-    imports: [CoreModule],
+    imports: [
+        CoreModule,
+        MongooseModule.forFeature([
+            {name: Cat.name, schema: CatSchema}
+        ]),
+    ],
     providers: [CatsService],
     controllers: [CatsController],
 
