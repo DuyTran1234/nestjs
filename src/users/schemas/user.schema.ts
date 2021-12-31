@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
-import { usersRegex } from "src/regex/users.regex";
+import { Document, ObjectId } from "mongoose";
+import { usersRegex } from "src/users/regex/users.regex";
 
 export type UserDocument = User & Document;
 
@@ -8,6 +8,12 @@ export type UserDocument = User & Document;
     timestamps: true,
 })
 export class User {
+
+    // @Prop({
+    //     auto: true,
+    // })
+    // _id: ObjectId
+
     @Prop({
         required: true,
         validate: usersRegex.usernameRegex
@@ -16,7 +22,6 @@ export class User {
 
     @Prop({
         required: true,
-        validate: usersRegex.passwordRegex
     })
     password: string;
 
@@ -33,6 +38,10 @@ export class User {
     })
     email: string;
     
+    @Prop({
+        validate: usersRegex.rolesRegex,
+    })
+    role: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

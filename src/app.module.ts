@@ -1,18 +1,20 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CatsModule } from './cats/cats.module';
-import { LoggerMiddleware } from './middleware/logger.middleware';
+import { AppController } from './app.controller';
+import { ArticlesModule } from './articles/articles.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/auth.service';
 import { UsersModule } from './users/users.module';
 const dotenv = require('dotenv');
-
 dotenv.config();
-console.log(process.env.DATABASE_URL);
 @Module({
   imports: [
+    ArticlesModule,
     UsersModule,
+    AuthModule,
     MongooseModule.forRoot(process.env.DATABASE_URL),
   ],
-  controllers: [],
+  controllers: [AppController],
 })
 export class AppModule {
   // configure middleware function

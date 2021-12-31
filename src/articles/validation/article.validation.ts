@@ -1,16 +1,17 @@
 import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform } from "@nestjs/common";
-import { userJoiSchema } from "src/joiSchemas/user.joi";
-
+import { articleJoiSchema } from "src/joiSchemas/article.joi";
 
 @Injectable()
-export class UserValidationPipe implements PipeTransform {
+export class ArticleValidationPipe implements PipeTransform {
     async transform(value: any, metadata: ArgumentMetadata) {
-        const schema = userJoiSchema;
+        const schema = articleJoiSchema;
         try {
             const result = await schema.validateAsync(value);
             return value;
         } catch (error) {
-            throw new HttpException('schema object validate error', HttpStatus.BAD_REQUEST);
+            throw new HttpException(
+                "validate articleDto fail from pipe", 
+                HttpStatus.BAD_REQUEST);
         }
     }
 }
